@@ -4,7 +4,7 @@
 %%%
 %%% Created : 10 dec 2012
 %%% -------------------------------------------------------------------
--module(cluster_controller_sup).
+-module(master_sup).
 
 -behaviour(supervisor).
 %% --------------------------------------------------------------------
@@ -13,7 +13,7 @@
  
 %% --------------------------------------------------------------------
 %% Definitions 
--define(HeartBeatInterval,30*1000).
+-define(HeartbeatInterval,30*1000).
 %% --------------------------------------------------------------------
 
 %% --------------------------------------------------------------------
@@ -61,14 +61,16 @@ heartbeat(HeartBeatInterval)->
 %%          {error, Reason}
 %% --------------------------------------------------------------------
 init([]) ->
-    spawn(fun()->h_beat(?HeartBeatInterval) end),
+    spawn(fun()->h_beat(?HeartbeatInterval) end),
     {ok,{{one_for_one,5,10}, 
 	 children()
 	}
     }.
 children()->
-    [?CHILD(common,worker),
+    [
+     ?CHILD(common,worker),
      ?CHILD(dbase,worker),
+     ?CHILD(master,worker),
      ?CHILD(control,worker)
     ].
 %% ====================================================================

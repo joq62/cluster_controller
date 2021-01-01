@@ -1,13 +1,13 @@
 %% This is the application resource file (.app file) for the 'base'
 %% application.
-{application, cluster_controller,
-[{description, "cluster_controller  " },
+{application, master,
+[{description, "master  " },
 {vsn, "1.0.0" },
 {modules, 
-	  [cluster_controller_app,cluster_controller_sup,
+	  [master_app,master_sup,master,
 	   control,dbase,common]},
-{registered,[control,dbase,common]},
+{registered,[master,control,dbase,common]},
 {applications, [kernel,stdlib]},
-{mod, {cluster_controller_app,[]}},
+{mod, {master_app,[]}},
 {start_phases, []}
 ]}.
