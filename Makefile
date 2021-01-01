@@ -18,6 +18,7 @@ doc_gen:
 test:
 	rm -rf ebin/* src/*.beam *.beam;
 	rm -rf  *~ */*~  erl_cra*;
+	rm -rf *_specs *_config;
 #	Common service
 	erlc -o ebin ../../services/common_src/src/*.erl;
 #	Dbase service
@@ -40,7 +41,10 @@ stop:
 boot:
 	rm -rf ebin/* src/*.beam *.beam;
 	rm -rf  *~ */*~  erl_cra*;
-	erl -pa ebin -sname master -setcookie app_test -detached;
-	sleep 1;
-	erl_call -a 'erlang date []' -sname master -c app_test;
-	erl_call -a 'init stop  []' -sname master -c app_test
+	rm -rf *_specs *_config;
+	erl -pa master/ebin\
+	    -run master boot\
+	     { git_user str joq62 } { git_pw str 20Qazxsw20 } { cl_dir str cluster_config }\
+	     { cl_file str cluster_info.hrl } { app_specs_dir str app_specs }\
+	     { service_specs_dir str service_specs }\
+	    -sname master -setcookie app_test -detached;
